@@ -1,24 +1,34 @@
 #include <ncurses.h>
 
-/* 
-ball
-/¯ ¯\
-\_ _/
-*/
-
-
-
-char ball[] = "/¯ ¯\\\n\\_ _/";
-
-int main(int argc, char *argv[]) 
+void initConf() 
 {
   initscr();
   raw();
   noecho();
   keypad(stdscr, TRUE);
+}
 
-  printw("Hello word!");
+int main(int argc, char *argv[]) 
+{
+  char ball[] = "/¯ ¯\\\n\\_ _/";
+
+  initConf();
+
+  int w, h;
+  getmaxyx(stdscr, h, w);
+  // printw("h : %d, w : %d", h, w);
   refresh();
-  getch();
+
+  for(;;) 
+  {
+    mvprintw(h / 2, w / 2, ball);
+    refresh();
+
+    if (getch() == 10 /* ENTER */) 
+    {
+      break;
+    }
+  }
+
   endwin();
 }

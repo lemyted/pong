@@ -2,16 +2,28 @@
 #include <stdio.h>
 #include <errno.h>
 #include <stdlib.h>
+#include <stdarg.h>
+#include <wchar.h>
+
+typedef struct visual
+{
+  char **map;
+  int h;
+  int w;
+} Visual;
+
+Visual *createVisual(int nLines, int len, ...);
+
+void deleteVisual(Visual *vsl);
+
 
 typedef struct object 
 {
-  char *visual;
+  Visual *vsl;
   int y;
   int x;
-  int length;
-  int heigth;
 } Object;
 
-Object *createObject(char *visl, int y, int x);
+Object *createObject(Visual *vsl, int y, int x);
 
 void deleteObject(Object *obj);

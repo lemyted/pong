@@ -1,66 +1,50 @@
 #include "Object.h"
 
-int getLength(char *str) 
+Visual *createVisual(int nLines, int len, ...) 
 {
-  int l = 0;
-  int lastRecordedL = 0;
+  char **map = (char**)malloc(sizeof (char*) * nLines);
 
-  for (int i = 0; str[i] != '\0'; i++) 
+  va_list args;
+  va_start(args, nLines);
+
+  for (int i = 0; i < nLines; i++) 
   {
-    if (str[i] != '\n') 
-    { 
-      l++;  
-    }
-    else 
-    {
-      if (l > lastRecordedL) 
-      {
-        lastRecordedL = l;
-      }
-      l = 1;
-    }  
+    char *arg = va_arg(args, char *);
+    int len = strlen(arg);
+    map[i] = (char*)malloc(sizeof (char) * (len + 1));
+    strcpy(map[i], arg);
   }
+  
+  va_end(args);
 
-  return lastRecordedL; 
+  Visual *vsl = (Visual*)malloc(sizeof (Visual));
+  vsl->map = map;
+  vsl->h = nLines;
+  vsl->w = len;
+
+  return vsl;
 }
 
-int getHeigth(char *str) 
+Object *createObject(Visual *vsl, int y, int x) 
 {
-  int h = 0;
-
-  if (strlen(str) > 0) 
-  {
-    h = 1;
-  }
-
-  for (int i = 0; str[i] != '\0'; i++) 
-  {
-    if (str[i] == '\n') { h++; }
-  }
-
-  return h;
-}
-
-Object *createObject(char *visl, int y, int x) 
-{
-  int len = strlen(visl);
+  // int len = strlen(visl);
   Object *obj = (Object*)malloc(sizeof (Object));
-  obj->visual = (char*)malloc(sizeof (char) * (len + 1));
+  // obj->visual = (char*)malloc(sizeof (char) * (len + 1));
 
-  if (visl[len] != '\0') { visl[len] = '\0'; }
+  // if (visl[len] != '\0') { visl[len] = '\0'; }
 
-  strcpy(obj->visual, visl);
-  obj->y = y;
-  obj->x = x;
-  obj->length = getLength(obj->visual);
-  obj->heigth = getHeigth(obj->visual);
+  // strcpy(obj->visual, visl);
+  // obj->y = y;
+  // obj->x = x;
+  // obj->length = getLength(obj->visual);
+  // obj->heigth = getHeigth(obj->visual);
 
   return obj;
 }
 
 void deleteObject(Object *obj) 
 {
-  free(obj->visual);
+  // free(obj->visual);
   free(obj);
 }
 
