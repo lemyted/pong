@@ -2,78 +2,104 @@
 #include <CUnit/Basic.h>
 #include "Object.h"
 
-void test_whenValidArgs_createVisual_returnVisual(void) 
+void test_whenValidArgs_createVisual_returnVisualBall(void) 
 {
-  char top[] = "\u2588\u2588\u2588\u2588\0";
-  char bottom[] = "\u2588\u2588\u2588\u2588\0";
+  printf("\n%s\n", HALF_BALL);
+  printf("%s\n", HALF_BALL);
 
-  printf("%s\n", top);
-  printf("%s\n", bottom);
-
-  Visual *vsl = createVisual(2, 4, top, bottom);
+  Visual *vsl = createVisual(2, HALF_BALL_LEN, HALF_BALL, HALF_BALL);
   CU_ASSERT_EQUAL(vsl->h, 2);
-  CU_ASSERT_EQUAL(vsl->w, 4);
-  CU_ASSERT_STRING_EQUAL(vsl->map[0], top);
-  CU_ASSERT_STRING_EQUAL(vsl->map[1], bottom);
+  CU_ASSERT_EQUAL(vsl->w, HALF_BALL_LEN);
+  CU_ASSERT_STRING_EQUAL(vsl->map[0], HALF_BALL);
+  CU_ASSERT_STRING_EQUAL(vsl->map[1], HALF_BALL);
+  deleteVisual(vsl);
 }
 
-// void test_whenValidArgs_createObject_returnObject(void) 
-// {
-//   char str[] = "ooo\nooo";
-//   char expectedStr[] = "ooo\nooo\0";
-//   int y = 10;
-//   int x = 12;
-//   Object *obj = createObject(str, y,x);
-//   CU_ASSERT_STRING_EQUAL(obj->visual, expectedStr);
-//   CU_ASSERT_EQUAL(obj->y, y);
-//   CU_ASSERT_EQUAL(obj->x, x);
-//   CU_ASSERT_EQUAL(obj->length, 3);
-//   CU_ASSERT_EQUAL(obj->heigth, 2);
-//   free(obj);
-// }
+void test_whenValidArgs_createVisual_returnVisualPaddle(void) 
+{
+  printf("\n%s\n", EIGHTH_PADDLE);
+  printf("%s\n", EIGHTH_PADDLE);
+  printf("%s\n", EIGHTH_PADDLE);
+  printf("%s\n", EIGHTH_PADDLE);
+  printf("%s\n", EIGHTH_PADDLE);
+  printf("%s\n", EIGHTH_PADDLE);
+  printf("%s\n", EIGHTH_PADDLE);
+  printf("%s\n", EIGHTH_PADDLE);
 
-// void test2_whenValidArgs_createObject_returnObject(void) 
-// {
-//   char str[] = "ooo\nooo\nooo0";
-//   char expectedStr[] = "ooo\nooo\nooo0\0";
-//   int y = 41;
-//   int x = 43;
-//   Object *obj = createObject(str, y,x);
-//   CU_ASSERT_STRING_EQUAL(obj->visual, expectedStr);
-//   CU_ASSERT_EQUAL(obj->y, y);
-//   CU_ASSERT_EQUAL(obj->x, x);
-//   CU_ASSERT_EQUAL(obj->length, 4);
-//   CU_ASSERT_EQUAL(obj->heigth, 3);
-//   free(obj);
-// }
+  Visual *vsl = createVisual(2, EIGHTH_PADDLE_LEN, 
+    EIGHTH_PADDLE, 
+    EIGHTH_PADDLE, 
+    EIGHTH_PADDLE, 
+    EIGHTH_PADDLE, 
+    EIGHTH_PADDLE, 
+    EIGHTH_PADDLE, 
+    EIGHTH_PADDLE, 
+    EIGHTH_PADDLE
+  );
+  CU_ASSERT_EQUAL(vsl->h, 8);
+  CU_ASSERT_EQUAL(vsl->w, EIGHTH_PADDLE_LEN);
+  CU_ASSERT_STRING_EQUAL(vsl->map[0], EIGHTH_PADDLE);
+  CU_ASSERT_STRING_EQUAL(vsl->map[7], EIGHTH_PADDLE);
+  deleteVisual(vsl);
+}
 
-// void test3_whenValidArgs_createObject_returnObject(void) 
-// {
-//   char str[] = "";
-//   char expectedStr[] = "\0";
-//   int y = 151;
-//   int x = 403;
-//   Object *obj = createObject(str, y,x);
-//   CU_ASSERT_STRING_EQUAL(obj->visual, expectedStr);
-//   CU_ASSERT_EQUAL(obj->y, y);
-//   CU_ASSERT_EQUAL(obj->x, x);
-//   CU_ASSERT_EQUAL(obj->length, 0);
-//   CU_ASSERT_EQUAL(obj->heigth, 0);
-//   free(obj);
-// }
+void test_whenValidVisual_deleteVisual_visualDeleted(void) 
+{
+  Visual *vsl = createVisual(2, HALF_BALL_LEN, HALF_BALL, HALF_BALL);
+  deleteVisual(vsl);
+  CU_ASSERT_NOT_EQUAL(vsl->h, 2);
+  CU_ASSERT_NOT_EQUAL(vsl->w, HALF_BALL_LEN);
+  CU_ASSERT_STRING_NOT_EQUAL(vsl->map[0], HALF_BALL);
+  CU_ASSERT_STRING_NOT_EQUAL(vsl->map[1], HALF_BALL);
+}
+
+void test_whenValidArgs_createObject_returnObject(void) 
+{
+  int y = 10;
+  int x = 12;
+  Visual *vsl = createVisual(2, HALF_BALL_LEN, HALF_BALL, HALF_BALL);
+  Object *obj = createObject(vsl, y,x);
+  CU_ASSERT_STRING_EQUAL(obj->vsl->map[0], HALF_BALL);
+  CU_ASSERT_STRING_EQUAL(obj->vsl->map[1], HALF_BALL);
+  CU_ASSERT_EQUAL(obj->y, y);
+  CU_ASSERT_EQUAL(obj->x, x);
+  CU_ASSERT_EQUAL(obj->vsl->w, HALF_BALL_LEN);
+  CU_ASSERT_EQUAL(obj->vsl->h, 2);
+  deleteObject(obj);
+}
+
+void test_whenValidObject_deleteObject_objectDeleted(void) 
+{
+  int y = 10;
+  int x = 12;
+  Visual *vsl = createVisual(2, HALF_BALL_LEN, HALF_BALL, HALF_BALL);
+  Object *obj = createObject(vsl, y,x);
+  deleteObject(obj);
+  CU_ASSERT_STRING_NOT_EQUAL(obj->vsl->map[0], HALF_BALL);
+  CU_ASSERT_STRING_NOT_EQUAL(obj->vsl->map[1], HALF_BALL);
+  CU_ASSERT_NOT_EQUAL(obj->y, y);
+  CU_ASSERT_NOT_EQUAL(obj->x, x);
+  CU_ASSERT_NOT_EQUAL(obj->vsl->w, HALF_BALL_LEN);
+  CU_ASSERT_NOT_EQUAL(obj->vsl->h, 2);
+}
 
 int main(void) 
 {
   CU_initialize_registry();
 
   CU_pSuite createVisual = CU_add_suite("createVisual", NULL, NULL);
-  CU_add_test(createVisual, "test_whenValidArgs_createVisual_returnVisual", test_whenValidArgs_createVisual_returnVisual);
+  CU_add_test(createVisual, "test_whenValidArgs_createVisual_returnVisualBall", test_whenValidArgs_createVisual_returnVisualBall);
+  CU_add_test(createVisual, "test_whenValidArgs_createVisual_returnVisualPaddle", test_whenValidArgs_createVisual_returnVisualPaddle);
 
-  // CU_pSuite createObject = CU_add_suite("createObject", NULL, NULL);
-  // CU_add_test(createObject, "test_whenValidArgs_createObject_returnObject", test_whenValidArgs_createObject_returnObject);
-  // CU_add_test(createObject, "test2_whenValidArgs_createObject_returnObject", test2_whenValidArgs_createObject_returnObject);
-  // CU_add_test(createObject, "test3_whenValidArgs_createObject_returnObject", test3_whenValidArgs_createObject_returnObject);
+  CU_pSuite deleteVisual = CU_add_suite("deleteVvisual", NULL, NULL);
+  CU_add_test(createVisual, "test_whenValidVisual_deleteVisual_visualDeleted", test_whenValidVisual_deleteVisual_visualDeleted);
 
+  CU_pSuite createObject = CU_add_suite("createObject", NULL, NULL);
+  CU_add_test(createObject, "test_whenValidArgs_createObject_returnObject", test_whenValidArgs_createObject_returnObject);
+
+  CU_pSuite deleteObject = CU_add_suite("deleteObject", NULL, NULL);
+  CU_add_test(deleteObject, "test_whenValidObject_deleteObject_objectDeleted", test_whenValidObject_deleteObject_objectDeleted);
+  
   CU_basic_run_tests();
   CU_cleanup_registry();
 }

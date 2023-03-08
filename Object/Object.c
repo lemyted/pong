@@ -5,7 +5,7 @@ Visual *createVisual(int nLines, int len, ...)
   char **map = (char**)malloc(sizeof (char*) * nLines);
 
   va_list args;
-  va_start(args, nLines);
+  va_start(args, len);
 
   for (int i = 0; i < nLines; i++) 
   {
@@ -25,26 +25,30 @@ Visual *createVisual(int nLines, int len, ...)
   return vsl;
 }
 
+void deleteVisual(Visual *vsl) 
+{
+  for (int i = 0; i < vsl->h; i++) 
+  {
+    free(vsl->map[i]);
+  }
+  free(vsl->map);
+  free(vsl);
+}
+
 Object *createObject(Visual *vsl, int y, int x) 
 {
-  // int len = strlen(visl);
   Object *obj = (Object*)malloc(sizeof (Object));
-  // obj->visual = (char*)malloc(sizeof (char) * (len + 1));
 
-  // if (visl[len] != '\0') { visl[len] = '\0'; }
-
-  // strcpy(obj->visual, visl);
-  // obj->y = y;
-  // obj->x = x;
-  // obj->length = getLength(obj->visual);
-  // obj->heigth = getHeigth(obj->visual);
+  obj->vsl = vsl;
+  obj->y = y;
+  obj->x = x;
 
   return obj;
 }
 
 void deleteObject(Object *obj) 
 {
-  // free(obj->visual);
+  deleteVisual(obj->vsl);
   free(obj);
 }
 
