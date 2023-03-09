@@ -11,7 +11,8 @@
 #define EIGHTH_PADDLE "\u2588\u2588\0"
 #define EIGHTH_PADDLE_LEN 2
 
-#define centerPos(pos, size) ((pos) - (size / 2))
+#define getCenterPos(pos, size) ((pos + (size)) - (size / 2))
+#define setCenterPos(centerPos, size) ((centerPos) - (size / 2))
 
 typedef struct visual
 {

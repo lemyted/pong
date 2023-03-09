@@ -83,6 +83,36 @@ void test_whenValidObject_deleteObject_objectDeleted(void)
   CU_ASSERT_NOT_EQUAL(obj->vsl->h, 2);
 }
 
+void test1_getCenterPos(void) 
+{
+  CU_ASSERT_EQUAL(getCenterPos(0, 2), 1);
+}
+
+void test2_getCenterPos(void) 
+{
+  CU_ASSERT_EQUAL(getCenterPos(10, 20), 20);
+}
+
+void test3_getCenterPos(void) 
+{
+  CU_ASSERT_EQUAL(getCenterPos(100, 10), 105);
+}
+
+void test1_setCenterPos(void) 
+{
+  CU_ASSERT_EQUAL(setCenterPos(1, 2), 0);
+}
+
+void test2_setCenterPos(void) 
+{
+  CU_ASSERT_EQUAL(setCenterPos(20, 20), 10);
+}
+
+void test3_setCenterPos(void) 
+{
+  CU_ASSERT_EQUAL(setCenterPos(105, 10), 100);
+}
+
 int main(void) 
 {
   CU_initialize_registry();
@@ -100,6 +130,16 @@ int main(void)
   CU_pSuite deleteObject = CU_add_suite("deleteObject", NULL, NULL);
   CU_add_test(deleteObject, "test_whenValidObject_deleteObject_objectDeleted", test_whenValidObject_deleteObject_objectDeleted);
   
+  CU_pSuite getCenterPos = CU_add_suite("getCenterPos", NULL, NULL);
+  CU_add_test(getCenterPos, "test1_getCenterPos", test1_getCenterPos);
+  CU_add_test(getCenterPos, "test2_getCenterPos", test2_getCenterPos);
+  CU_add_test(getCenterPos, "test3_getCenterPos", test3_getCenterPos);
+
+  CU_pSuite setCenterPos = CU_add_suite("setCenterPos", NULL, NULL);
+  CU_add_test(setCenterPos, "test1_setCenterPos", test1_setCenterPos);
+  CU_add_test(setCenterPos, "test2_setCenterPos", test2_setCenterPos);
+  CU_add_test(setCenterPos, "test3_setCenterPos", test3_setCenterPos);
+
   CU_basic_run_tests();
   CU_cleanup_registry();
 }
