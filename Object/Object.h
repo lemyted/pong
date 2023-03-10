@@ -5,6 +5,7 @@
 #include <stdarg.h>
 #include <wchar.h>
 
+#define BLOCK 0x2588
 #define HALF_BALL "\u2588\u2588\u2588\u2588\0"
 #define HALF_BALL_LEN 4
 
@@ -30,6 +31,8 @@ typedef struct object
   Visual *vsl;
   int y;
   int x;
+  int velocityY;
+  int velocityX;
 } Object;
 
 Object *createObject(Visual *vsl, int y, int x);

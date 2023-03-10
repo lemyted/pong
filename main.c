@@ -1,34 +1,56 @@
-#include <ncurses.h>
+#include "Utils/Utils.h"
 
-void initConf() 
+#define REFRESH_RATE 1000000 / 24
+#define leftBorder 4
+#define rightBorder(max_x) ((max_x) - 6)
+
+void *threadHandlePaddles(void *x) 
 {
-  initscr();
-  raw();
-  noecho();
-  keypad(stdscr, TRUE);
+  Inputs *in = (Inputs*)x;
+
+  while(in->running) 
+  {
+    handlePaddles(&(in->running), in->ball, in->leftPaddle, in->rightPaddle);
+    usleep(10000);
+  }
+
+  int ret;
+  pthread_exit(&ret);
 }
 
 int main(int argc, char *argv[]) 
 {
-  char ball[] = "/¯ ¯\\\n\\_ _/";
-
   initConf();
 
-  int w, h;
-  getmaxyx(stdscr, h, w);
-  // printw("h : %d, w : %d", h, w);
-  refresh();
+  int maxX, maxY;
+  getmaxyx(stdscr, maxY, maxX);
+  mvprintw(0, 0, "max y: %d", maxY);
 
-  for(;;) 
+  Object *ball = createBall(maxY / 2, maxX / 2);
+  Object *leftPaddle = createPaddle(1, leftBorder);
+  Object *rightPaddle = createPaddle(maxY - 2, rightBorder(maxX));
+
+  leftPaddle->y = setCenterPos(maxY / 2, leftPaddle->vsl->h);
+  rightPaddle->y = setCenterPos(maxY / 2, rightPaddle->vsl->h);
+  
+  Inputs *inputs = createInputs(maxY, maxX, ball, leftPaddle, rightPaddle); 
+  pthread_t *threadPaddles = createThread();
+  pthread_t *threadBall = createThread();
+
+  pthread_create(threadPaddles, NULL, threadHandlePaddles, inputs);
+  
+  while(inputs->running) 
   {
-    mvprintw(h / 2, w / 2, ball);
+    handleBall(ball, maxY, leftPaddle, rightPaddle);
+    updateBall(ball, maxY, leftPaddle, rightPaddle);
+    updatePaddles(leftPaddle, rightPaddle, maxY);
+    usleep(REFRESH_RATE);
     refresh();
-
-    if (getch() == 10 /* ENTER */) 
-    {
-      break;
-    }
+    clear();
   }
 
+  deleteInputs(inputs);
+  free(threadPaddles);
+  free(threadBall);
   endwin();
 }

@@ -26,7 +26,7 @@ void test_whenValidArgs_createVisual_returnVisualPaddle(void)
   printf("%s\n", EIGHTH_PADDLE);
   printf("%s\n", EIGHTH_PADDLE);
 
-  Visual *vsl = createVisual(2, EIGHTH_PADDLE_LEN, 
+  Visual *vsl = createVisual(8, EIGHTH_PADDLE_LEN, 
     EIGHTH_PADDLE, 
     EIGHTH_PADDLE, 
     EIGHTH_PADDLE, 
@@ -39,7 +39,7 @@ void test_whenValidArgs_createVisual_returnVisualPaddle(void)
   CU_ASSERT_EQUAL(vsl->h, 8);
   CU_ASSERT_EQUAL(vsl->w, EIGHTH_PADDLE_LEN);
   CU_ASSERT_STRING_EQUAL(vsl->map[0], EIGHTH_PADDLE);
-  CU_ASSERT_STRING_EQUAL(vsl->map[7], EIGHTH_PADDLE);
+  CU_ASSERT_STRING_EQUAL(vsl->map[1], EIGHTH_PADDLE);
   deleteVisual(vsl);
 }
 

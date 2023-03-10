@@ -42,6 +42,8 @@ Object *createObject(Visual *vsl, int y, int x)
   obj->vsl = vsl;
   obj->y = y;
   obj->x = x;
+  obj->velocityY = 0;
+  obj->velocityX = 0;
 
   return obj;
 }
